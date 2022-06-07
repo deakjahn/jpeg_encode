@@ -1,12 +1,12 @@
 # JPEG encoder
 
 Skia, the engine behind `dart:ui` has no support for JPEG, only PNG and raw RGBA. And the source
-code comments make it clear that they don't intend to add any more format, those should be left to
+code comments make it clear that they don't intend to add any more formats, those should be left to
 external packages.
 
-While there are packages that offer full support for image manipulation, many times we don't need
-that, just to be able to convert a file to JPG for use outside out app, maybe to send it to the web.
-This package does that and nothin else. It's a simplistic JPEG encoder that doesn't offer any extra
+While there are packages that offer full support for image manipulation, many a time we don't need
+that, just to be able to convert a file to JPG for use outside of our app, maybe to send it to the web.
+This package does that and nothing else. It's a minimalistic JPEG encoder that doesn't offer any extra
 functionality but to create the simplest JPEG file. Not necessarily the best or most compressed one,
 although it's fairly good, nonetheless.
 
