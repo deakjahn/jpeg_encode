@@ -1,0 +1,11 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude: [build/**]
+  errors:
+    lines_longer_than_80_chars: ignore
+
+linter:
+  rules:
+    curly_braces_in_flow_control_structures: false
+    avoid_print: false
