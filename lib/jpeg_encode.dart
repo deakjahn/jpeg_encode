@@ -175,7 +175,6 @@ class JpegEncoder {
   }
 
   Uint8List compress(Uint8List pixels, int width, int height, int quality) {
-    int comp = 4;
     bool subsample = (quality < 80);
     quality = quality.clamp(1, 100);
     quality = (quality < 50) ? 5000 ~/ quality : 200 - quality * 2;
@@ -219,11 +218,6 @@ class JpegEncoder {
       ..putUint8FromList([0xFF, 0xDA, 0, 0xC, 3, 1, 0, 2, 0x11, 3, 0x11, 0, 0x3F, 0]);
 
     // Encode 8x8 macroblocks
-    int ofsG = (comp > 1) ? 1 : 0;
-    int ofsB = (comp > 1) ? 2 : 0;
-    int dataR = 0;
-    int dataG = dataR + ofsG;
-    int dataB = dataR + ofsB;
     int DCY = 0, DCU = 0, DCV = 0;
 
     if (subsample) {
@@ -233,13 +227,14 @@ class JpegEncoder {
           final U = List.filled(256, 0.0);
           final V = List.filled(256, 0.0);
           for (int row = y, pos = 0; row < y + 16; row++) {
+            int prow = row >= height ? height - 1 : row;
+            int rowWidth = prow * width * 4;
             for (int col = x; col < x + 16; col++, pos++) {
-              int prow = row >= height ? height - 1 : row;
               int pcol = col >= width ? width - 1 : col;
-              int p = prow * width * comp + pcol * comp;
-              double r = pixels[p + dataR].toDouble();
-              double g = pixels[p + dataG].toDouble();
-              double b = pixels[p + dataB].toDouble();
+              int p = rowWidth + pcol * 4;
+              double r = pixels[p].toDouble();
+              double g = pixels[p + 1].toDouble();
+              double b = pixels[p + 2].toDouble();
               Y[pos] = 0.29900 * r + 0.58700 * g + 0.11400 * b - 128;
               U[pos] = -0.16874 * r - 0.33126 * g + 0.50000 * b;
               V[pos] = 0.50000 * r - 0.41869 * g - 0.08131 * b;
@@ -266,17 +261,18 @@ class JpegEncoder {
     } else {
       for (int y = 0; y < height; y += 8) {
         for (int x = 0; x < width; x += 8) {
-          final Y = List.filled(256, 0.0);
-          final U = List.filled(256, 0.0);
-          final V = List.filled(256, 0.0);
+          final Y = List.filled(64, 0.0);
+          final U = List.filled(64, 0.0);
+          final V = List.filled(64, 0.0);
           for (int row = y, pos = 0; row < y + 8; row++) {
+            int prow = row >= height ? height - 1 : row;
+            int rowWidth = prow * width * 4;
             for (int col = x; col < x + 8; col++, pos++) {
-              int prow = row >= height ? height - 1 : row;
               int pcol = col >= width ? width - 1 : col;
-              int p = prow * width * comp + pcol * comp;
-              double r = pixels[p + dataR].toDouble();
-              double g = pixels[p + dataG].toDouble();
-              double b = pixels[p + dataB].toDouble();
+              int p = rowWidth + pcol * 4;
+              double r = pixels[p].toDouble();
+              double g = pixels[p + 1].toDouble();
+              double b = pixels[p + 2].toDouble();
               Y[pos] = 0.29900 * r + 0.58700 * g + 0.11400 * b - 128;
               U[pos] = -0.16874 * r - 0.33126 * g + 0.50000 * b;
               V[pos] = 0.50000 * r - 0.41869 * g - 0.08131 * b;
@@ -290,8 +286,7 @@ class JpegEncoder {
     }
 
     // Do the bit alignment of the EOI marker
-    List<int> fillBits = [0x7F, 7];
-    _writeBits(out, fillBits);
+    _writeBits(out, [0x7F, 7]);
     out.putUint8(0xFF);
     out.putUint8(0xD9);
 
