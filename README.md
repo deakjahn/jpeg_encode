@@ -20,8 +20,8 @@ Let's suppose you have a `dart:ui` `Image` from somewhere, maybe you converted f
 ```dart
 import "dart:ui" as ui;
 
-Uint8List pixels;
-final codec = await ui.instantiateImageCodec(pixels);
+Uint8List bytes;
+final codec = await ui.instantiateImageCodec(bytes);
 final frame = await codec.getNextFrame();
 final image = frame.image;
 ```
