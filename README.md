@@ -33,6 +33,10 @@ final data = await image.toByteData(format: skia.ImageByteFormat.rawRgba);
 final jpg = JpegEncoder().compress(data!.buffer.asUint8List(), image.width, image.height, 90);
 ```
 
+In other words, the pixel array is expected to be in row major format (all columns of first row,
+then of the second row, etc), four bytes for each pixel: R, G, B and A. Alpha is ignored but the byte
+is expected to be there. Consequently, the length of the array has to be `width * height * 4`.
+
 Before you ask, saving in Flutter is as simple as:
 
 ```dart

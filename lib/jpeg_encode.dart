@@ -25,8 +25,6 @@ library jpeg_encode;
  *
  * */
 
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 
 // ignore_for_file: non_constant_identifier_names
