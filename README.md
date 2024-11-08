@@ -1,5 +1,7 @@
 # JPEG encoder
 
+[![pub package](https://img.shields.io/pub/v/jpeg_encode.svg)](https://pub.dev/packages/jpeg_encode)
+
 Skia, the engine behind `dart:ui` has no support for JPEG, only PNG and raw RGBA. And the source
 code comments make it clear that they don't intend to add any more formats, those should be left to
 external packages.
@@ -43,3 +45,9 @@ Before you ask, saving in Flutter is as simple as:
 File(path).writeAsBytesSync(jpg); // or
 await File(path).writeAsBytes(jpg);
 ```
+
+# Support
+
+If you like this package, please consider supporting it.
+
+<a href="https://www.buymeacoffee.com/deakjahn" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Book" height="60" width="217"></a>
